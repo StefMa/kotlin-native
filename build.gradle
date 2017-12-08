@@ -26,6 +26,11 @@ ext {
     konanPropertiesFile = project(':backend.native').file('konan.properties')
     konanProperties = PropertiesKt.loadProperties(konanPropertiesFile.absolutePath)
 
+    // When building Kotlin Native itself, ensure that iOS SDKs have fixed versions:
+    replacePropertySuffix(konanProperties, "targetSysRoot.ios", "iPhoneOS.sdk", "iPhoneOS11.2.sdk")
+    replacePropertySuffix(konanProperties, "targetSysRoot.ios_sim", "iPhoneSimulator.sdk", "iPhoneSimulator11.2.sdk")
+    // TODO: the same should be done for platform klib compilation if these SDKs are not default.
+
     distDir = file('dist')
     dependenciesDir = DependencyProcessor.defaultDependenciesRoot
     clangManager = new ClangManager(konanProperties, dependenciesDir.absolutePath)
@@ -56,6 +61,22 @@ allprojects {
 void setupHostAndTarget() {
     ext.hostName = TargetManager.hostName
     ext.targetList = TargetManager.enabled(konanProperties)*.userName as List
+}
+
+static String replaceSuffix(String str, String oldSuffix, String newSuffix) {
+    if (!str.endsWith(oldSuffix)) {
+        throw new Error(str)
+    }
+    return str.substring(0, str.length() - oldSuffix.length()) + newSuffix
+}
+
+static void replacePropertySuffix(Properties properties, String key, String oldSuffix, String newSuffix) {
+    String value = properties.getProperty(key)
+    if (value == null) {
+        throw new Error(key);
+    }
+
+    properties.setProperty(key, replaceSuffix(value, oldSuffix, newSuffix))
 }
 
 void setupClang(Project project) {

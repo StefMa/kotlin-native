@@ -49,8 +49,8 @@ enum class KonanTarget(
 ) {
     ANDROID_ARM32(  Family.ANDROID,     Architecture.ARM32,     "android_arm32"),
     ANDROID_ARM64(  Family.ANDROID,     Architecture.ARM64,     "android_arm64"),
-    IPHONE(         Family.IOS,         Architecture.ARM64,     "ios"),
-    IPHONE_SIM(     Family.IOS,         Architecture.X64,       "ios_sim"),
+    IPHONE(         Family.IOS,         Architecture.ARM64,     "ios",            usesLocalSysRoot = true),
+    IPHONE_SIM(     Family.IOS,         Architecture.X64,       "ios_sim",        usesLocalSysRoot = true),
     LINUX(          Family.LINUX,       Architecture.X64,       "linux"),
     MINGW(          Family.WINDOWS,     Architecture.X64,       "mingw"),
     MACBOOK(        Family.OSX,         Architecture.X64,       "osx"),
@@ -193,7 +193,7 @@ class TargetManager(val userRequest: String? = null) {
                 KonanTarget.MACBOOK -> {
                     KonanTarget.MACBOOK.supported = true
                     KonanTarget.IPHONE.supported = true
-                    //KonanTarget.IPHONE_SIM.supported = true
+                    KonanTarget.IPHONE_SIM.supported = true
                     KonanTarget.ANDROID_ARM32.supported = true
                     KonanTarget.ANDROID_ARM64.supported = true
                     KonanTarget.WASM32.supported = true
