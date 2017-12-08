@@ -23,6 +23,7 @@ import org.gradle.api.plugins.BasePlugin
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 import org.jetbrains.kotlin.gradle.plugin.KonanPlugin.Companion.COMPILE_ALL_TASK_NAME
 import org.jetbrains.kotlin.gradle.plugin.tasks.*
+import org.jetbrains.kotlin.konan.properties.loadProperties
 import org.jetbrains.kotlin.konan.target.KonanTarget
 import org.jetbrains.kotlin.konan.target.TargetManager
 import java.io.File
@@ -56,6 +57,9 @@ internal val Project.konanHome: String
         assert(hasProperty(KonanPlugin.ProjectProperty.KONAN_HOME))
         return project.file(getProperty(KonanPlugin.ProjectProperty.KONAN_HOME)).canonicalPath
     }
+
+internal val Project.konanProperties: String
+    get() = "${this.konanHome}/konan/konan.properties"
 
 internal val Project.konanBuildRoot          get() = buildDir.resolve("konan")
 internal val Project.konanBinBaseDir         get() = konanBuildRoot.resolve("bin")
@@ -231,6 +235,14 @@ open class KonanExtension {
 
     internal val konanTargets: List<KonanTarget>
         get() = targets.map { TargetManager(it).target }.distinct()
+
+    internal lateinit var project: Project
+
+    internal val enabledKonanTargets by lazy {
+        TargetManager.enabled(
+                org.jetbrains.kotlin.konan.file.File(project.konanProperties).loadProperties()
+        ).toSet()
+    }
 }
 
 class KonanPlugin @Inject constructor(private val registry: ToolingModelBuilderRegistry)
@@ -269,7 +281,7 @@ class KonanPlugin @Inject constructor(private val registry: ToolingModelBuilderR
         // Create necessary tasks and extensions.
         project.tasks.create(KONAN_DOWNLOAD_TASK_NAME, KonanCompilerDownloadTask::class.java)
         project.tasks.create(KONAN_GENERATE_CMAKE_TASK_NAME, KonanGenerateCMakeTask::class.java)
-        project.extensions.create(KONAN_EXTENSION_NAME, KonanExtension::class.java)
+        project.extensions.create(KONAN_EXTENSION_NAME, KonanExtension::class.java).also { it.project = project }
         project.extensions.create(KonanArtifactContainer::class.java, ARTIFACTS_CONTAINER_NAME, KonanArtifactContainer::class.java, project)
 
         // Set additional project properties like konan.home, konan.build.targets etc.

@@ -44,12 +44,6 @@ class KonanConfig(val project: Project, val configuration: CompilerConfiguration
 
     private val target = targetManager.target
 
-    init {
-        if (!target.enabled) {
-            error("Target $target is not available on the ${TargetManager.host} host")
-        }
-    }
-
     val indirectBranchesAreAllowed = target != KonanTarget.WASM32
 
     private fun Distribution.prepareDependencies(checkDependencies: Boolean) {
@@ -62,6 +56,12 @@ class KonanConfig(val project: Project, val configuration: CompilerConfiguration
         configuration.get(KonanConfigKeys.PROPERTY_FILE),
         configuration.get(KonanConfigKeys.RUNTIME_FILE)).apply {
         prepareDependencies(configuration.getBoolean(KonanConfigKeys.CHECK_DEPENDENCIES))
+    }
+
+    init {
+        if (target !in TargetManager.enabled(distribution.properties)) {
+            error("Target $target is not available on the current ${TargetManager.host} host")
+        }
     }
 
     internal val clang = TargetClang(distribution.properties, distribution.dependenciesDir, target)

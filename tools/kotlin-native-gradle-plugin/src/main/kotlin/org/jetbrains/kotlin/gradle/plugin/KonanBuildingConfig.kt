@@ -48,7 +48,7 @@ abstract class KonanBuildingConfig<T: KonanBuildingTask>(private val name_: Stri
 
     init {
         declaredTargets.forEach {
-            if (it.enabled) {
+            if (it in project.konanExtension.enabledKonanTargets) {
                 super.add(createTask(it))
             } else {
                 project.logger.warn("The target is not enabled on the current host: ${it.userName}")
@@ -138,7 +138,7 @@ abstract class KonanBuildingConfig<T: KonanBuildingTask>(private val name_: Stri
     fun target(targetString: String, configureAction: T.() -> Unit) {
         val target = TargetManager(targetString).target
 
-        if (!target.enabled) {
+        if (target !in project.konanExtension.enabledKonanTargets) {
             project.logger.warn("Target '$targetString' of artifact '$name' is not supported on the current host")
             return
         }

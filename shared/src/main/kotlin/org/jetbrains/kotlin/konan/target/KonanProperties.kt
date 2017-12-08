@@ -47,7 +47,7 @@ class KonanProperties(val target: KonanTarget, val properties: Properties, val b
     val llvmDebugOptFlags get() = targetList("llvmDebugOptFlags")
     val s2wasmFlags get() = targetList("s2wasmFlags")
 
-    val targetSysRoot get() = targetString("targetSysRoot")
+    private val targetSysRoot get() = targetString("targetSysRoot")
     val libffiDir get() = targetString("libffiDir")
     val gccToolchain get() = targetString("gccToolchain")
     val targetArg get() = targetString("quadruple")
@@ -58,7 +58,14 @@ class KonanProperties(val target: KonanTarget, val properties: Properties, val b
 
     fun absolute(value: String?) = "${baseDir!!}/${value!!}"
 
-    val absoluteTargetSysRoot get() = absolute(targetSysRoot)
+    val absoluteTargetSysRoot get() = if (target.usesLocalSysRoot) {
+        targetSysRoot!!.also { assert(File(it).isAbsolute) }
+    } else {
+        absolute(targetSysRoot)
+    }
+
+    val targetSysRootIsLocal get() = target.usesLocalSysRoot
+
     val absoluteTargetToolchain get() = absolute(targetToolchain)
     val absoluteGccToolchain get() = absolute(gccToolchain)
     val absoluteLlvmHome get() = absolute(llvmHome)
@@ -75,4 +82,14 @@ class KonanProperties(val target: KonanTarget, val properties: Properties, val b
         }
 
     val osVersionMin: String? get() = targetString("osVersionMin")
+
+    init {
+        if (!target.supported) {
+            error("Target $target is not supported on the ${TargetManager.host} host")
+        }
+    }
+
+    internal val isTargetAvailable: Boolean
+        get() = !target.usesLocalSysRoot || File(absoluteTargetSysRoot).exists
+
 }

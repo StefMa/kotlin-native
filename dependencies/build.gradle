@@ -239,7 +239,7 @@ enum DependencyKind {
     String toString() { return name }
 }
 
-TargetManager.enabled.each { target ->
+TargetManager.enabled(konanProperties).each { target ->
     def konanProperties = new KonanProperties(target,
             rootProject.ext.konanProperties,
             rootProject.ext.dependenciesDir.canonicalPath

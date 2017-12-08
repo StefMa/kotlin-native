@@ -45,6 +45,12 @@ class ToolConfig(userProvidedTargetName: String?, userProvidedKonanProperties: S
 
     val llvmHome = targetProperties.absolute(targetProperties.hostString("llvmHome"))
 
+    val localSysRoot get() = if (targetProperties.targetSysRootIsLocal) {
+        targetProperties.absoluteTargetSysRoot
+    } else {
+        null
+    }
+
     val defaultCompilerOpts = 
         targetProperties.defaultCompilerOpts()
 

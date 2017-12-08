@@ -55,7 +55,7 @@ allprojects {
 
 void setupHostAndTarget() {
     ext.hostName = TargetManager.hostName
-    ext.targetList = TargetManager.enabled*.userName as List
+    ext.targetList = TargetManager.enabled(konanProperties)*.userName as List
 }
 
 void setupClang(Project project) {

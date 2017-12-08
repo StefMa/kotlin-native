@@ -16,6 +16,9 @@
 
 package org.jetbrains.kotlin.konan.target
 
+import org.jetbrains.kotlin.konan.properties.KonanProperties
+import org.jetbrains.kotlin.konan.properties.Properties
+
 enum class Family(name:String, val exeSuffix:String, val dynamicPrefix: String, val dynamicSuffix: String) {
     OSX(    "osx"    , "kexe", "lib", "dylib"),
     IOS(    "ios"    , "kexe", "lib", "dylib"),
@@ -37,7 +40,13 @@ enum class Architecture(val bitness: Int) {
         get() = this.name.toLowerCase()
 }
 
-enum class KonanTarget(val family: Family, val architecture: Architecture, val detailedName: String, var enabled: Boolean = false) {
+enum class KonanTarget(
+        val family: Family,
+        val architecture: Architecture,
+        val detailedName: String,
+        internal val usesLocalSysRoot: Boolean = false,
+        internal var supported: Boolean = false
+) {
     ANDROID_ARM32(  Family.ANDROID,     Architecture.ARM32,     "android_arm32"),
     ANDROID_ARM64(  Family.ANDROID,     Architecture.ARM64,     "android_arm64"),
     IPHONE(         Family.IOS,         Architecture.ARM64,     "ios"),
@@ -92,12 +101,11 @@ class TargetManager(val userRequest: String? = null) {
         return name
     }
 
-    fun list() {
-        targets.forEach { key, it -> 
-            if (it.enabled) {
-                val isDefault = if (it == target) "(default)" else ""
-                println(String.format("%1$-30s%2$-10s", "$key:", "$isDefault"))
-            }
+    fun list(properties: Properties) {
+        TargetManager.enabled(properties).forEach {
+            val key = it.userName
+            val isDefault = if (it == target) "(default)" else ""
+            println(String.format("%1$-30s%2$-10s", "$key:", "$isDefault"))
         }
     }
 
@@ -170,34 +178,37 @@ class TargetManager(val userRequest: String? = null) {
         init {
             when (host) {
                 KonanTarget.LINUX   -> {
-                    KonanTarget.LINUX.enabled = true
-                    KonanTarget.RASPBERRYPI.enabled = true
-                    KonanTarget.LINUX_MIPS32.enabled = true
-                    KonanTarget.LINUX_MIPSEL32.enabled = true
-                    KonanTarget.ANDROID_ARM32.enabled = true
-                    KonanTarget.ANDROID_ARM64.enabled = true
-                    KonanTarget.WASM32.enabled = true
+                    KonanTarget.LINUX.supported = true
+                    KonanTarget.RASPBERRYPI.supported = true
+                    KonanTarget.LINUX_MIPS32.supported = true
+                    KonanTarget.LINUX_MIPSEL32.supported = true
+                    KonanTarget.ANDROID_ARM32.supported = true
+                    KonanTarget.ANDROID_ARM64.supported = true
+                    KonanTarget.WASM32.supported = true
                 }
                 KonanTarget.MINGW -> {
-                    KonanTarget.MINGW.enabled = true
-                    KonanTarget.WASM32.enabled = true
+                    KonanTarget.MINGW.supported = true
+                    KonanTarget.WASM32.supported = true
                 }
                 KonanTarget.MACBOOK -> {
-                    KonanTarget.MACBOOK.enabled = true
-                    KonanTarget.IPHONE.enabled = true
-                    //KonanTarget.IPHONE_SIM.enabled = true
-                    KonanTarget.ANDROID_ARM32.enabled = true
-                    KonanTarget.ANDROID_ARM64.enabled = true
-                    KonanTarget.WASM32.enabled = true
+                    KonanTarget.MACBOOK.supported = true
+                    KonanTarget.IPHONE.supported = true
+                    //KonanTarget.IPHONE_SIM.supported = true
+                    KonanTarget.ANDROID_ARM32.supported = true
+                    KonanTarget.ANDROID_ARM64.supported = true
+                    KonanTarget.WASM32.supported = true
                 }
                 else ->
                     throw TargetSupportException("Unknown host platform: $host")
             }
         }
 
+        internal val supported get() = KonanTarget.values().filter { it.supported }
+
         @JvmStatic
-        val enabled: List<KonanTarget> 
-            get() = KonanTarget.values().asList().filter { it.enabled }
+        fun enabled(properties: Properties) = supported.filter {
+            KonanProperties(it, properties).isTargetAvailable
+        }
     }
 }
 

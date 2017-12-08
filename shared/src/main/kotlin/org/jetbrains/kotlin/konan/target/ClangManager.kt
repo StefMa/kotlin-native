@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.konan.properties.*
 
 class ClangManager(val properties: Properties, val baseDir: String) {
     private val host = TargetManager.host
-    private val enabledTargets = TargetManager.enabled
+    private val enabledTargets = TargetManager.enabled(properties)
     private val konanProperties = enabledTargets.map {
         it to KonanProperties(it, properties, baseDir)
     }.toMap()

@@ -34,7 +34,7 @@ fun runTopLevelPhases(konanConfig: KonanConfig, environment: KotlinCoreEnvironme
 
     val targets = konanConfig.targetManager
     if (config.get(KonanConfigKeys.LIST_TARGETS) ?: false) {
-        targets.list()
+        targets.list(konanConfig.distribution.properties)
     }
 
     KonanPhases.config(konanConfig)
