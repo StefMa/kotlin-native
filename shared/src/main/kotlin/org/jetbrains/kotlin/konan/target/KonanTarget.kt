@@ -44,8 +44,7 @@ enum class KonanTarget(
         val family: Family,
         val architecture: Architecture,
         val detailedName: String,
-        internal val usesLocalSysRoot: Boolean = false,
-        internal var supported: Boolean = false
+        internal val usesLocalSysRoot: Boolean = false
 ) {
     ANDROID_ARM32(  Family.ANDROID,     Architecture.ARM32,     "android_arm32"),
     ANDROID_ARM64(  Family.ANDROID,     Architecture.ARM64,     "android_arm64"),
@@ -60,6 +59,9 @@ enum class KonanTarget(
     WASM32(         Family.WASM,        Architecture.WASM32,    "wasm32");
 
     val userName get() = name.toLowerCase()
+
+    var supported: Boolean = false
+        internal set
 }
 
 fun hostTargetSuffix(host: KonanTarget, target: KonanTarget) =
@@ -203,7 +205,7 @@ class TargetManager(val userRequest: String? = null) {
             }
         }
 
-        internal val supported get() = KonanTarget.values().filter { it.supported }
+        val supported get() = KonanTarget.values().filter { it.supported }
 
         @JvmStatic
         fun enabled(properties: Properties) = supported.filter {

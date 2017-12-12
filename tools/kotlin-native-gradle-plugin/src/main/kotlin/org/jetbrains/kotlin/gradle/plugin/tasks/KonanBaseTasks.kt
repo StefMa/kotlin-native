@@ -28,7 +28,6 @@ import org.gradle.util.ConfigureUtil
 import org.jetbrains.kotlin.gradle.plugin.KonanArtifactSpec
 import org.jetbrains.kotlin.gradle.plugin.KonanArtifactWithLibrariesSpec
 import org.jetbrains.kotlin.gradle.plugin.KonanLibrariesSpec
-import org.jetbrains.kotlin.gradle.plugin.konanExtension
 import org.jetbrains.kotlin.konan.target.KonanTarget
 import org.jetbrains.kotlin.konan.target.TargetManager
 import java.io.File
@@ -49,7 +48,7 @@ abstract class KonanTargetableTask: DefaultTask() {
     }
 
     val targetIsSupported: Boolean
-        @Internal get() = konanTarget in project.konanExtension.enabledKonanTargets
+        @Internal get() = konanTarget.supported
 
     val isCrossCompile: Boolean
         @Internal get() = (konanTarget != TargetManager.host)
