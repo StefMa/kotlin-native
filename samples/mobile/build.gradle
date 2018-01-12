@@ -21,5 +21,5 @@ apply plugin: 'konan'
 konan.targets = ['iphone', 'iphone_sim']
 
 konanArtifacts {
-    framework('KotlinArithmeticParser')
+    framework('KotlinSharedLib')
 }

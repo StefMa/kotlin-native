@@ -12,8 +12,8 @@
 		2C3F384A1FD1738300151601 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C3F38481FD1738300151601 /* Main.storyboard */; };
 		2C3F384C1FD1738300151601 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C3F384B1FD1738300151601 /* Assets.xcassets */; };
 		2C3F384F1FD1738300151601 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C3F384D1FD1738300151601 /* LaunchScreen.storyboard */; };
-		2C3F385B1FD1760A00151601 /* KotlinArithmeticParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3F385A1FD1760A00151601 /* KotlinArithmeticParser.framework */; };
-		2C3F385C1FD1760A00151601 /* KotlinArithmeticParser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3F385A1FD1760A00151601 /* KotlinArithmeticParser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F8872F922008FA94001CD51D /* KotlinSharedLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8872F912008FA94001CD51D /* KotlinSharedLib.framework */; };
+		F8872F942008FC3B001CD51D /* KotlinSharedLib.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F8872F912008FA94001CD51D /* KotlinSharedLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,7 +23,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2C3F385C1FD1760A00151601 /* KotlinArithmeticParser.framework in Embed Frameworks */,
+				F8872F942008FC3B001CD51D /* KotlinSharedLib.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,8 +38,8 @@
 		2C3F384B1FD1738300151601 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C3F384E1FD1738300151601 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C3F38501FD1738300151601 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2C3F385A1FD1760A00151601 /* KotlinArithmeticParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KotlinArithmeticParser.framework; path = build/konan/bin/xcode/KotlinArithmeticParser.framework; sourceTree = "<group>"; };
 		F8872F882008D8CE001CD51D /* KotlinCalculator copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "KotlinCalculator copy-Info.plist"; path = "/Users/stefan/Developer/KotlinNative/source/samples/mobile/KotlinCalculator copy-Info.plist"; sourceTree = "<absolute>"; };
+		F8872F912008FA94001CD51D /* KotlinSharedLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KotlinSharedLib.framework; path = build/konan/bin/iphone_sim/KotlinSharedLib.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C3F385B1FD1760A00151601 /* KotlinArithmeticParser.framework in Frameworks */,
+				F8872F922008FA94001CD51D /* KotlinSharedLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,7 +57,7 @@
 		2C3F38381FD1738300151601 = {
 			isa = PBXGroup;
 			children = (
-				2C3F385A1FD1760A00151601 /* KotlinArithmeticParser.framework */,
+				F8872F912008FA94001CD51D /* KotlinSharedLib.framework */,
 				2C3F38431FD1738300151601 /* basicCalculator */,
 				2C3F38421FD1738300151601 /* Products */,
 				F8872F882008D8CE001CD51D /* KotlinCalculator copy-Info.plist */,
@@ -167,7 +167,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos)\n        TARGET=iphone\n        TASK=compileKonanKotlinArithmeticParserIphone\n        ;;\n    iphonesimulator)\n        TARGET=iphone_sim\n        TASK=compileKonanKotlinArithmeticParserIphone_sim\n        ;;\n    *)\n        echo \"Unknown platform: $PLATFORM_NAME\"\n        exit 1\n        ;;\nesac\n\nmkdir -p \"$SRCROOT/build/konan/bin/\"\nrm -f \"$SRCROOT/build/konan/bin/xcode\"\nln -s \"$TARGET\" \"$SRCROOT/build/konan/bin/xcode\"\n\n\"$SRCROOT/../gradlew\" -p \"$SRCROOT\" \"$TASK\"";
+			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos)\n        TARGET=iphone\n        TASK=compileKonanKotlinSharedLibIphone\n        ;;\n    iphonesimulator)\n        TARGET=iphone_sim\n        TASK=compileKonanKotlinSharedLibIphone_sim\n        ;;\n    *)\n        echo \"Unknown platform: $PLATFORM_NAME\"\n        exit 1\n        ;;\nesac\n\nmkdir -p \"$SRCROOT/build/konan/bin/\"\nrm -f \"$SRCROOT/build/konan/bin/xcode\"\nln -s \"$TARGET\" \"$SRCROOT/build/konan/bin/xcode\"\n\n\"$SRCROOT/../gradlew\" -p \"$SRCROOT\" \"$TASK\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -320,6 +320,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/konan/bin/xcode",
+					"$(PROJECT_DIR)/build/konan/bin/iphone_sim",
 				);
 				INFOPLIST_FILE = basicCalculator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
@@ -342,6 +343,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/konan/bin/xcode",
+					"$(PROJECT_DIR)/build/konan/bin/iphone_sim",
 				);
 				INFOPLIST_FILE = basicCalculator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;

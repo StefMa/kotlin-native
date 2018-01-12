@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import KotlinArithmeticParser
+import KotlinSharedLib
 
 class ViewController: UIViewController, UITextViewDelegate, UICollectionViewDataSource {
 
@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITextViewDelegate, UICollectionViewData
     @IBOutlet var input: UITextView!
     @IBOutlet var numpad: UICollectionView!
 
-    private let parser = KAPPartialParser(composer: KAPCalculator(), partialComposer: PartialRenderer())
+    private let parser = KSLPartialParser(composer: KSLCalculator(), partialComposer: PartialRenderer())
 
     @IBAction func numpadButtonPressed(_ sender: UIButton) {
         let title = sender.currentTitle!
@@ -112,7 +112,7 @@ private extension String {
     }
 }
 
-private class PartialRenderer: NSObject, KAPPartialExpressionComposer {
+private class PartialRenderer: NSObject, KSLPartialExpressionComposer {
     func missing() -> Any {
         return "... ".toAttributed()
     }
