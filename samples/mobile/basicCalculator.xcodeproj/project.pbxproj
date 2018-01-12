@@ -38,7 +38,6 @@
 		2C3F384B1FD1738300151601 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C3F384E1FD1738300151601 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C3F38501FD1738300151601 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F8872F882008D8CE001CD51D /* KotlinCalculator copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "KotlinCalculator copy-Info.plist"; path = "/Users/stefan/Developer/KotlinNative/source/samples/mobile/KotlinCalculator copy-Info.plist"; sourceTree = "<absolute>"; };
 		F8872F912008FA94001CD51D /* KotlinSharedLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KotlinSharedLib.framework; path = build/konan/bin/iphone_sim/KotlinSharedLib.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,7 +59,6 @@
 				F8872F912008FA94001CD51D /* KotlinSharedLib.framework */,
 				2C3F38431FD1738300151601 /* basicCalculator */,
 				2C3F38421FD1738300151601 /* Products */,
-				F8872F882008D8CE001CD51D /* KotlinCalculator copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
