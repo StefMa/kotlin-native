@@ -1,0 +1,1 @@
+cd ../.. && ./gradlew :mobile:jar
